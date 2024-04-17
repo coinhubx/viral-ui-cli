@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.7
+
+### Patch Changes
+
+- change dist
+
 ## 0.0.6
 
 ### Patch Changes
