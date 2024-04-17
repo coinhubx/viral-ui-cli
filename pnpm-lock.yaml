@@ -62,9 +62,6 @@ dependencies:
   tsconfig-paths:
     specifier: ^4.2.0
     version: 4.2.0
-  type-fest:
-    specifier: ^4.15.0
-    version: 4.15.0
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -91,6 +88,9 @@ devDependencies:
   tsup:
     specifier: ^8.0.2
     version: 8.0.2(typescript@5.4.5)
+  type-fest:
+    specifier: ^4.15.0
+    version: 4.15.0
   typescript:
     specifier: ^5.3.3
     version: 5.4.5
@@ -3921,7 +3921,7 @@ packages:
   /type-fest@4.15.0:
     resolution: {integrity: sha512-tB9lu0pQpX5KJq54g+oHOLumOx+pMep4RaM6liXh2PKmVRFF+/vAtUP0ZaJ0kOySfVNjF6doBWPHhBhISKdlIA==}
     engines: {node: '>=16'}
-    dev: false
+    dev: true
 
   /typed-array-buffer@1.0.2:
     resolution: {integrity: sha512-gEymJYKZtKXzzBzM4jqa9w6Q1Jjm7x2d+sh19AdsD4wqnMPDYyvwpsIc2Q/835kHuo3BEQ7CjelGhfTsoBb2MQ==}
