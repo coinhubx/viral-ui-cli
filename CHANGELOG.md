@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.5
+
+### Patch Changes
+
+- add cli code
+
 ## 0.0.4
 
 ### Patch Changes
