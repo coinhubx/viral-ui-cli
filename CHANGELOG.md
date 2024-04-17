@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.6
+
+### Patch Changes
+
+- update dist dir
+
 ## 0.0.5
 
 ### Patch Changes
