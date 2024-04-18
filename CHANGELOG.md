@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.11
+
+### Patch Changes
+
+- change url
+
 ## 0.0.10
 
 ### Patch Changes

@@ -29,6 +29,7 @@ import prompts from "prompts";
 import { z } from "zod";
 
 import { applyPrefixesCss } from "../utils/transformers/transform-tw-prefix";
+import { BASE_URL } from "../utils/constants";
 
 const PROJECT_DEPENDENCIES = [
   "tailwindcss-animate",
@@ -187,7 +188,7 @@ export async function promptForConfig(
   ]);
 
   const config = rawConfigSchema.parse({
-    $schema: "https://ui.shadcn.com/schema.json",
+    $schema: `${BASE_URL}/schema.json`,
     style: options.style,
     tailwind: {
       config: options.tailwindConfig,

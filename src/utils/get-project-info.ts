@@ -9,6 +9,7 @@ import {
 import fg from "fast-glob";
 import fs, { pathExists } from "fs-extra";
 import { loadConfig } from "tsconfig-paths";
+import { BASE_URL } from "./constants";
 
 // TODO: Add support for more frameworks.
 // We'll start with Next.js for now.
@@ -88,7 +89,7 @@ export async function getProjectConfig(cwd: string): Promise<Config | null> {
   const isTsx = await isTypeScriptProject(cwd);
 
   const config: RawConfig = {
-    $schema: "https://ui.shadcn.com/schema.json",
+    $schema: `${BASE_URL}/schema.json`,
     rsc: ["next-app", "next-app-src"].includes(projectType),
     tsx: isTsx,
     style: "new-york",

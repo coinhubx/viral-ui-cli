@@ -10,9 +10,9 @@ import {
 import { HttpsProxyAgent } from "https-proxy-agent";
 import fetch from "node-fetch";
 import { z } from "zod";
+import { BASE_URL } from "../constants";
 
-const baseUrl =
-  process.env.COMPONENTS_REGISTRY_URL ?? "https://yazzi-ui.vercel.app";
+const baseUrl = process.env.COMPONENTS_REGISTRY_URL ?? BASE_URL;
 const agent = process.env.https_proxy
   ? new HttpsProxyAgent(process.env.https_proxy)
   : undefined;
