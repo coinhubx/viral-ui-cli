@@ -115,15 +115,15 @@ export async function promptForConfig(
       active: "yes",
       inactive: "no",
     },
-    {
-      type: "select",
-      name: "style",
-      message: `Which ${highlight("style")} would you like to use?`,
-      choices: styles.map((style) => ({
-        title: style.label,
-        value: style.name,
-      })),
-    },
+    // {
+    //   type: "select",
+    //   name: "style",
+    //   message: `Which ${highlight("style")} would you like to use?`,
+    //   choices: styles.map((style) => ({
+    //     title: style.label,
+    //     value: style.name,
+    //   })),
+    // },
     {
       type: "select",
       name: "tailwindBaseColor",
@@ -141,16 +141,16 @@ export async function promptForConfig(
       message: `Where is your ${highlight("global CSS")} file?`,
       initial: defaultConfig?.tailwind.css ?? DEFAULT_TAILWIND_CSS,
     },
-    {
-      type: "toggle",
-      name: "tailwindCssVariables",
-      message: `Would you like to use ${highlight(
-        "CSS variables"
-      )} for colors?`,
-      initial: defaultConfig?.tailwind.cssVariables ?? true,
-      active: "yes",
-      inactive: "no",
-    },
+    // {
+    //   type: "toggle",
+    //   name: "tailwindCssVariables",
+    //   message: `Would you like to use ${highlight(
+    //     "CSS variables"
+    //   )} for colors?`,
+    //   initial: defaultConfig?.tailwind.cssVariables ?? true,
+    //   active: "yes",
+    //   inactive: "no",
+    // },
     {
       type: "text",
       name: "tailwindPrefix",
@@ -189,12 +189,12 @@ export async function promptForConfig(
 
   const config = rawConfigSchema.parse({
     $schema: `${BASE_URL}/schema.json`,
-    style: options.style,
+    style: styles[0],
     tailwind: {
       config: options.tailwindConfig,
       css: options.tailwindCss,
       baseColor: options.tailwindBaseColor,
-      cssVariables: options.tailwindCssVariables,
+      cssVariables: "yes",
       prefix: options.tailwindPrefix,
     },
     rsc: options.rsc,
@@ -384,10 +384,7 @@ export async function runInit(cwd: string, config: Config) {
   const packageManager = await getPackageManager(cwd);
 
   // TODO: add support for other icon libraries.
-  const deps = [
-    ...PROJECT_DEPENDENCIES,
-    config.style === "new-york" ? "@radix-ui/react-icons" : "lucide-react",
-  ];
+  const deps = [...PROJECT_DEPENDENCIES, "lucide-react"];
 
   await execa(
     packageManager,

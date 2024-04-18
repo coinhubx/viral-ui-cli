@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.12
+
+### Patch Changes
+
+- change tailwind config setup
+
 ## 0.0.11
 
 ### Patch Changes
