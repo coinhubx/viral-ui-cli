@@ -124,17 +124,17 @@ export async function promptForConfig(
     //     value: style.name,
     //   })),
     // },
-    {
-      type: "select",
-      name: "tailwindBaseColor",
-      message: `Which color would you like to use as ${highlight(
-        "base color"
-      )}?`,
-      choices: baseColors.map((color) => ({
-        title: color.label,
-        value: color.name,
-      })),
-    },
+    // {
+    //   type: "select",
+    //   name: "tailwindBaseColor",
+    //   message: `Which color would you like to use as ${highlight(
+    //     "base color"
+    //   )}?`,
+    //   choices: baseColors.map((color) => ({
+    //     title: color.label,
+    //     value: color.name,
+    //   })),
+    // },
     {
       type: "text",
       name: "tailwindCss",
@@ -193,8 +193,8 @@ export async function promptForConfig(
     tailwind: {
       config: options.tailwindConfig,
       css: options.tailwindCss,
-      baseColor: options.tailwindBaseColor,
-      cssVariables: "yes",
+      baseColor: baseColors[0],
+      cssVariables: true,
       prefix: options.tailwindPrefix,
     },
     rsc: options.rsc,
@@ -244,42 +244,42 @@ export async function promptForMinimalConfig(
     const styles = await getRegistryStyles();
     const baseColors = await getRegistryBaseColors();
 
-    const options = await prompts([
-      {
-        type: "select",
-        name: "style",
-        message: `Which ${highlight("style")} would you like to use?`,
-        choices: styles.map((style) => ({
-          title: style.label,
-          value: style.name,
-        })),
-      },
-      {
-        type: "select",
-        name: "tailwindBaseColor",
-        message: `Which color would you like to use as ${highlight(
-          "base color"
-        )}?`,
-        choices: baseColors.map((color) => ({
-          title: color.label,
-          value: color.name,
-        })),
-      },
-      {
-        type: "toggle",
-        name: "tailwindCssVariables",
-        message: `Would you like to use ${highlight(
-          "CSS variables"
-        )} for colors?`,
-        initial: defaultConfig?.tailwind.cssVariables,
-        active: "yes",
-        inactive: "no",
-      },
-    ]);
+    // const options = await prompts([
+    // {
+    //   type: "select",
+    //   name: "style",
+    //   message: `Which ${highlight("style")} would you like to use?`,
+    //   choices: styles.map((style) => ({
+    //     title: style.label,
+    //     value: style.name,
+    //   })),
+    // },
+    // {
+    //   type: "select",
+    //   name: "tailwindBaseColor",
+    //   message: `Which color would you like to use as ${highlight(
+    //     "base color"
+    //   )}?`,
+    //   choices: baseColors.map((color) => ({
+    //     title: color.label,
+    //     value: color.name,
+    //   })),
+    // },
+    // {
+    //   type: "toggle",
+    //   name: "tailwindCssVariables",
+    //   message: `Would you like to use ${highlight(
+    //     "CSS variables"
+    //   )} for colors?`,
+    //   initial: defaultConfig?.tailwind.cssVariables,
+    //   active: "yes",
+    //   inactive: "no",
+    // },
+    // ]);
 
-    style = options.style;
-    baseColor = options.tailwindBaseColor;
-    cssVariables = options.tailwindCssVariables;
+    style = styles[0].name;
+    baseColor = baseColors[0].name;
+    cssVariables = true;
   }
 
   const config = rawConfigSchema.parse({
