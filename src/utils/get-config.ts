@@ -4,7 +4,6 @@ import { cosmiconfig } from "cosmiconfig";
 import { loadConfig } from "tsconfig-paths";
 import { z } from "zod";
 
-export const DEFAULT_STYLE = "default";
 export const DEFAULT_COMPONENTS = "@/components";
 export const DEFAULT_UTILS = "@/lib/utils";
 export const DEFAULT_TAILWIND_CSS = "app/globals.css";
@@ -20,7 +19,6 @@ const explorer = cosmiconfig("components", {
 export const rawConfigSchema = z
   .object({
     $schema: z.string().optional(),
-    style: z.string(),
     rsc: z.coerce.boolean().default(false),
     tsx: z.coerce.boolean().default(true),
     tailwind: z.object({

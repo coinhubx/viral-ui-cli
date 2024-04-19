@@ -5,7 +5,6 @@ import {
   registryIndexSchema,
   registryItemWithContentSchema,
   registryWithContentSchema,
-  stylesSchema,
 } from "@/src/utils/registry/schema";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import fetch from "node-fetch";
@@ -24,16 +23,6 @@ export async function getRegistryIndex() {
     return registryIndexSchema.parse(result);
   } catch (error) {
     throw new Error(`Failed to fetch components from registry.`);
-  }
-}
-
-export async function getRegistryStyles() {
-  try {
-    const [result] = await fetchRegistry(["styles/index.json"]);
-
-    return stylesSchema.parse(result);
-  } catch (error) {
-    throw new Error(`Failed to fetch styles from registry.`);
   }
 }
 
@@ -83,12 +72,9 @@ export async function resolveTree(
   );
 }
 
-export async function fetchTree(
-  style: string,
-  tree: z.infer<typeof registryIndexSchema>
-) {
+export async function fetchTree(tree: z.infer<typeof registryIndexSchema>) {
   try {
-    const paths = tree.map((item) => `styles/${style}/${item.name}.json`);
+    const paths = tree.map((item) => `ui/${item.name}.json`);
     const result = await fetchRegistry(paths);
 
     return registryWithContentSchema.parse(result);

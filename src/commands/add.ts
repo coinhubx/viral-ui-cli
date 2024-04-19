@@ -94,7 +94,7 @@ export const add = new Command()
       }
 
       const tree = await resolveTree(registryIndex, selectedComponents);
-      const payload = await fetchTree(config.style, tree);
+      const payload = await fetchTree(tree);
       const baseColor = await getRegistryBaseColor(config.tailwind.baseColor);
 
       if (!payload.length) {

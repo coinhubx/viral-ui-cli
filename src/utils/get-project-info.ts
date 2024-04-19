@@ -92,7 +92,6 @@ export async function getProjectConfig(cwd: string): Promise<Config | null> {
     $schema: `${BASE_URL}/schema.json`,
     rsc: ["next-app", "next-app-src"].includes(projectType),
     tsx: isTsx,
-    style: "default",
     tailwind: {
       config: isTsx ? "tailwind.config.ts" : "tailwind.config.js",
       baseColor: "zinc",
