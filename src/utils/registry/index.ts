@@ -83,27 +83,23 @@ export async function fetchTree(tree: z.infer<typeof registryIndexSchema>) {
   }
 }
 
-export async function getItemTargetPath(
-  config: Config,
-  item: Pick<z.infer<typeof registryItemWithContentSchema>, "type">,
-  override?: string
-) {
+export async function getItemTargetPath(config: Config, override?: string) {
   if (override) {
     return override;
   }
 
-  if (item.type === "components:ui" && config.aliases.ui) {
+  if (config.aliases.ui) {
     return config.resolvedPaths.ui;
   }
 
-  const [parent, type] = item.type.split(":");
+  const parent = "components";
   if (!(parent in config.resolvedPaths)) {
     return null;
   }
 
   return path.join(
     config.resolvedPaths[parent as keyof typeof config.resolvedPaths],
-    type
+    "ui"
   );
 }
 

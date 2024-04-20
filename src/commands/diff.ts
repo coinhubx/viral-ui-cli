@@ -144,7 +144,7 @@ async function diffComponent(
   const changes = [];
 
   for (const item of payload) {
-    const targetDir = await getItemTargetPath(config, item);
+    const targetDir = await getItemTargetPath(config);
 
     if (!targetDir) {
       continue;

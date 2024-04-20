@@ -1,5 +1,11 @@
 # yazzi-ui
 
+## 0.0.15
+
+### Patch Changes
+
+- remove type
+
 ## 0.0.14
 
 ### Patch Changes

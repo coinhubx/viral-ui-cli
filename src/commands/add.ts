@@ -120,7 +120,6 @@ export const add = new Command()
         spinner.text = `Installing ${item.name}...`;
         const targetDir = await getItemTargetPath(
           config,
-          item,
           options.path ? path.resolve(cwd, options.path) : undefined
         );
 
