@@ -1,6 +1,6 @@
 {
-  "name": "clout-ui",
-  "version": "0.0.16",
+  "name": "viral-ui",
+  "version": "0.0.17",
   "description": "",
   "private": false,
   "type": "module",
@@ -16,9 +16,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ColeBlender/clout-ui"
+    "url": "https://github.com/ColeBlender/viral-ui"
   },
-  "homepage": "https://github.com/ColeBlender/clout-ui",
+  "homepage": "https://github.com/ColeBlender/viral-ui",
   "keywords": [],
   "author": "Cole Blender",
   "license": "MIT",
