@@ -1,4 +1,10 @@
-# yazzi-ui
+# clout-ui
+
+## 0.0.16
+
+### Patch Changes
+
+- rename
 
 ## 0.0.15
 

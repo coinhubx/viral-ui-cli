@@ -3,7 +3,6 @@ import { Config } from "@/src/utils/get-config";
 import {
   registryBaseColorSchema,
   registryIndexSchema,
-  registryItemWithContentSchema,
   registryWithContentSchema,
 } from "@/src/utils/registry/schema";
 import { HttpsProxyAgent } from "https-proxy-agent";
