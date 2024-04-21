@@ -1,10 +1,10 @@
-# clout-ui
+# viral-ui
 
-## 0.0.17
+## 0.0.18
 
 ### Patch Changes
 
-- change name to viral-ui
+- fix changelog
 
 ## 0.0.16
 
