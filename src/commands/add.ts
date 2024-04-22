@@ -114,7 +114,7 @@ export const add = new Command()
 
         // console.log(content);
 
-        await fs.writeFile("src/components/ui/button.tsx", item.content);
+        await fs.writeFile("@/components/ui/button.tsx", item.content);
         // }
 
         //
