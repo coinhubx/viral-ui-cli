@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.40
+
+### Patch Changes
+
+- fix nested fileName problem
+
 ## 0.0.39
 
 ### Patch Changes
