@@ -112,6 +112,8 @@ export const add = new Command()
           raw: item.content,
         });
 
+        console.log(content);
+
         await fs.writeFile("src/components/ui", content);
         // }
 
