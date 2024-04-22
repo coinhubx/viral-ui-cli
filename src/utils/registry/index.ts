@@ -1,4 +1,3 @@
-import path from "path";
 import {
   registryIndexSchema,
   registryWithContentSchema,
@@ -60,7 +59,7 @@ export async function fetchTree(tree: z.infer<typeof registryIndexSchema>) {
   }
 }
 
-async function fetchRegistry(paths: string[]) {
+export async function fetchRegistry(paths: string[]) {
   try {
     const results = await Promise.all(
       paths.map(async (path) => {
