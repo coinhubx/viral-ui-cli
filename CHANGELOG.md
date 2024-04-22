@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.38
+
+### Patch Changes
+
+- add username and fileNames to fetch function
+
 ## 0.0.37
 
 ### Patch Changes

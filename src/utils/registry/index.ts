@@ -10,20 +10,23 @@ type Component = {
   updatedAt: string;
 };
 
-export async function fetchComponents(): Promise<Component[]> {
+export async function fetchComponents(
+  username: string,
+  fileNames: string[]
+): Promise<Component[]> {
   try {
-    const component = await fetch(`${BASE_URL}/api/components`, {
+    const components = await fetch(`${BASE_URL}/api/components`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "cole",
-        fileName: "button.tsx",
+        username,
+        fileNames,
       }),
-    }).then((res) => res.json() as Promise<Component>);
+    }).then((res) => res.json() as Promise<Component[]>);
 
-    return [component];
+    return components;
   } catch (error) {
     console.log(error);
     throw new Error(`Failed to fetch registry from ${BASE_URL}.`);

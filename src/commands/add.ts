@@ -35,11 +35,11 @@ export const add = new Command()
   )
   .option("-a, --all", "add all available components", false)
   .option("-p, --path <path>", "the path to add the component to.")
-  .action(async (username, components, opts) => {
+  .action(async (username, fileNames, opts) => {
     try {
       const options = addOptionsSchema.parse({
         username,
-        components,
+        fileNames,
         ...opts,
       });
 
@@ -50,7 +50,7 @@ export const add = new Command()
         process.exit(1);
       }
 
-      const payload = await fetchComponents();
+      const payload = await fetchComponents(username, fileNames);
 
       if (!payload.length) {
         logger.warn("Selected components not found. Exiting.");
