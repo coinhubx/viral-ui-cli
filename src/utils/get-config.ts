@@ -80,6 +80,8 @@ export async function getRawConfig(cwd: string): Promise<RawConfig | null> {
       return null;
     }
     console.log("C");
+    console.log({ configResult });
+    console.log({ config: configResult.config });
     const output = rawConfigSchema.parse(configResult.config);
 
     console.log("D");
