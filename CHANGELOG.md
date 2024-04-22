@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.45
+
+### Patch Changes
+
+- update logger message
+
 ## 0.0.44
 
 ### Patch Changes

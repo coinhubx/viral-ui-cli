@@ -26,7 +26,7 @@ export const add = new Command()
 
       if (!payload.length) {
         logger.warn(
-          "Selected components not found. Make sure username and component name(s) are correct."
+          "Selected components not found.\nMake sure username and component file name(s) are correct."
         );
         process.exit(0);
       }
