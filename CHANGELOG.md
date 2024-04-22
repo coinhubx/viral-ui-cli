@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.29
+
+### Patch Changes
+
+- change url
+
 ## 0.0.28
 
 ### Patch Changes
