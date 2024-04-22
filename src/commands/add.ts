@@ -4,7 +4,6 @@ import { getPackageManager } from "@/src/utils/get-package-manager";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
 import { fetchComponents } from "@/src/utils/registry";
-import { transform } from "@/src/utils/transformers";
 import chalk from "chalk";
 import { Command } from "commander";
 import { execa } from "execa";
@@ -51,7 +50,6 @@ export const add = new Command()
         process.exit(1);
       }
 
-      // const registryIndex = await getRegistryIndex();
       const payload = await fetchComponents();
 
       if (!payload.length) {
@@ -63,7 +61,7 @@ export const add = new Command()
 
       for (const item of payload) {
         spinner.text = `Installing ${item.fileName}...`;
-        const targetDir = "@/components/ui";
+        const targetDir = "src/components/ui";
 
         if (!targetDir) {
           continue;
@@ -73,48 +71,35 @@ export const add = new Command()
           await fs.mkdir(targetDir, { recursive: true });
         }
 
-        // const existingComponent = item.files.filter((file) =>
-        //   existsSync(path.resolve(targetDir, file.name))
-        // );
+        const existingComponent = existsSync(
+          path.resolve(targetDir, item.fileName)
+        );
 
-        // if (existingComponent.length && !options.overwrite) {
-        //   if (selectedComponents.includes(item.name)) {
-        //     spinner.stop();
+        if (existingComponent) {
+          spinner.stop();
 
-        //     const { overwrite } = await prompts({
-        //       type: "confirm",
-        //       name: "overwrite",
-        //       message: `Component ${item.name} already exists. Would you like to overwrite?`,
-        //       initial: false,
-        //     });
+          const { overwrite } = await prompts({
+            type: "confirm",
+            name: "overwrite",
+            message: `Component ${item.fileName} already exists. Would you like to overwrite?`,
+            initial: false,
+          });
 
-        //     if (!overwrite) {
-        //       logger.info(
-        //         `Skipped ${item.name}. To overwrite, run with the ${chalk.green(
-        //           "--overwrite"
-        //         )} flag.`
-        //       );
-        //       continue;
-        //     }
+          if (!overwrite) {
+            logger.info(
+              `Skipped ${
+                item.fileName
+              }. To overwrite, run with the ${chalk.green("--overwrite")} flag.`
+            );
+            continue;
+          }
 
-        //     spinner.start(`Installing ${item.name}...`);
-        //   } else {
-        //     continue;
-        //   }
-        // }
+          spinner.start(`Installing ${item.fileName}...`);
+        }
 
-        // for (const file of item.files) {
-        //   let filePath = path.resolve(targetDir, file.name);
+        const filePath = path.resolve(targetDir, item.fileName);
 
-        //   // Run transformers.
-        // const content = await transform({
-        //   filename: item.fileName,
-        //   raw: item.content,
-        // });
-
-        // console.log(content);
-
-        await fs.writeFile("@/components/ui/button.tsx", item.content);
+        await fs.writeFile(filePath, item.content);
         // }
 
         //
@@ -125,7 +110,7 @@ export const add = new Command()
 
         // const packageManager = await getPackageManager(cwd);
 
-        // Install dependencies.
+        // // Install dependencies.
         // if (item.dependencies?.length) {
         //   await execa(
         //     packageManager,

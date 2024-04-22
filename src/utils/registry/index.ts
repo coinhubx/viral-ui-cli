@@ -1,10 +1,10 @@
 import { HttpsProxyAgent } from "https-proxy-agent";
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 import { BASE_URL } from "../constants";
 
-const agent = process.env.https_proxy
-  ? new HttpsProxyAgent(process.env.https_proxy)
-  : undefined;
+// const agent = process.env.https_proxy
+//   ? new HttpsProxyAgent(process.env.https_proxy)
+//   : undefined;
 
 type Component = {
   id: number;
@@ -20,7 +20,7 @@ export async function fetchComponents(): Promise<Component[]> {
   try {
     const component = await fetch(`${BASE_URL}/api/components`, {
       method: "POST",
-      agent,
+      // agent,
       headers: {
         "Content-Type": "application/json",
       },
