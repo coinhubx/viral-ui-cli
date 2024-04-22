@@ -1,11 +1,5 @@
 import { existsSync } from "fs";
 import path from "path";
-import {
-  Config,
-  RawConfig,
-  getConfig,
-  resolveConfigPaths,
-} from "@/src/utils/get-config";
 import fg from "fast-glob";
 import fs, { pathExists } from "fs-extra";
 import { loadConfig } from "tsconfig-paths";
@@ -67,35 +61,6 @@ export async function getTsConfig() {
   } catch (error) {
     return null;
   }
-}
-
-export async function getProjectConfig(cwd: string): Promise<Config | null> {
-  // Check for existing component config.
-  const existingConfig = await getConfig(cwd);
-  if (existingConfig) {
-    return existingConfig;
-  }
-
-  const projectType = await getProjectType(cwd);
-  const tsConfigAliasPrefix = await getTsConfigAliasPrefix(cwd);
-
-  if (!projectType || !tsConfigAliasPrefix) {
-    return null;
-  }
-
-  const isTsx = await isTypeScriptProject(cwd);
-
-  const config: RawConfig = {
-    $schema: `${BASE_URL}/schema.json`,
-    rsc: ["next-app", "next-app-src"].includes(projectType),
-    tsx: isTsx,
-    aliases: {
-      utils: `${tsConfigAliasPrefix}/lib/utils`,
-      components: `${tsConfigAliasPrefix}/components`,
-    },
-  };
-
-  return await resolveConfigPaths(cwd, config);
 }
 
 export async function getProjectType(cwd: string): Promise<ProjectType | null> {

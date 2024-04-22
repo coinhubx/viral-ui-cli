@@ -1,16 +1,12 @@
 import { promises as fs } from "fs";
 import { tmpdir } from "os";
 import path from "path";
-import { Config } from "@/src/utils/get-config";
 import { transformImport } from "@/src/utils/transformers/transform-import";
-import { transformJsx } from "@/src/utils/transformers/transform-jsx";
-import { transformRsc } from "@/src/utils/transformers/transform-rsc";
 import { Project, ScriptKind, type SourceFile } from "ts-morph";
 
 export type TransformOpts = {
   filename: string;
   raw: string;
-  config: Config;
 };
 
 export type Transformer<Output = SourceFile> = (
@@ -19,7 +15,7 @@ export type Transformer<Output = SourceFile> = (
   }
 ) => Promise<Output>;
 
-const transformers: Transformer[] = [transformImport, transformRsc];
+const transformers: Transformer[] = [transformImport];
 
 const project = new Project({
   compilerOptions: {},
@@ -40,8 +36,5 @@ export async function transform(opts: TransformOpts) {
     transformer({ sourceFile, ...opts });
   }
 
-  return await transformJsx({
-    sourceFile,
-    ...opts,
-  });
+  return sourceFile.getFullText();
 }

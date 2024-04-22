@@ -1,15 +1,9 @@
 import { existsSync, promises as fs } from "fs";
 import path from "path";
-import { getConfig } from "@/src/utils/get-config";
 import { getPackageManager } from "@/src/utils/get-package-manager";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
-import {
-  fetchTree,
-  getItemTargetPath,
-  getRegistryIndex,
-  resolveTree,
-} from "@/src/utils/registry";
+import { fetchTree, getRegistryIndex, resolveTree } from "@/src/utils/registry";
 import { transform } from "@/src/utils/transformers";
 import chalk from "chalk";
 import { Command } from "commander";
@@ -54,17 +48,6 @@ export const add = new Command()
 
       if (!existsSync(cwd)) {
         logger.error(`The path ${cwd} does not exist. Please try again.`);
-        process.exit(1);
-      }
-
-      const config = await getConfig(cwd);
-
-      if (!config) {
-        logger.warn(
-          `Configuration is missing. Please run ${chalk.green(
-            `pnpm dlx shadcn-ui@latest init`
-          )} to create a components.json file.`
-        );
         process.exit(1);
       }
 
@@ -122,10 +105,7 @@ export const add = new Command()
 
       for (const item of payload) {
         spinner.text = `Installing ${item.name}...`;
-        const targetDir = await getItemTargetPath(
-          config,
-          options.path ? path.resolve(cwd, options.path) : undefined
-        );
+        const targetDir = "@/components/ui";
 
         if (!targetDir) {
           continue;
@@ -172,13 +152,7 @@ export const add = new Command()
           const content = await transform({
             filename: file.name,
             raw: file.content,
-            config,
           });
-
-          if (!config.tsx) {
-            filePath = filePath.replace(/\.tsx$/, ".jsx");
-            filePath = filePath.replace(/\.ts$/, ".js");
-          }
 
           await fs.writeFile(filePath, content);
         }

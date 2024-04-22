@@ -1,5 +1,4 @@
 import path from "path";
-import { Config } from "@/src/utils/get-config";
 import {
   registryIndexSchema,
   registryWithContentSchema,
@@ -59,26 +58,6 @@ export async function fetchTree(tree: z.infer<typeof registryIndexSchema>) {
   } catch (error) {
     throw new Error(`Failed to fetch tree from registry.`);
   }
-}
-
-export async function getItemTargetPath(config: Config, override?: string) {
-  if (override) {
-    return override;
-  }
-
-  if (config.aliases.ui) {
-    return config.resolvedPaths.ui;
-  }
-
-  const parent = "components";
-  if (!(parent in config.resolvedPaths)) {
-    return null;
-  }
-
-  return path.join(
-    config.resolvedPaths[parent as keyof typeof config.resolvedPaths],
-    "ui"
-  );
 }
 
 async function fetchRegistry(paths: string[]) {
