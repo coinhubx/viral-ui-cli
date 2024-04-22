@@ -1,4 +1,4 @@
-import { BASE_URL } from "../constants";
+import { BASE_URL } from "./constants";
 
 type Component = {
   id: number;
@@ -29,6 +29,6 @@ export async function fetchComponents(
     return components;
   } catch (error) {
     console.log(error);
-    throw new Error(`Failed to fetch registry from ${BASE_URL}.`);
+    throw new Error(`Failed to fetch components from ${BASE_URL}.`);
   }
 }

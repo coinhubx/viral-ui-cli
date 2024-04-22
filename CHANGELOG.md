@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.41
+
+### Patch Changes
+
+- remove unused deps
+
 ## 0.0.40
 
 ### Patch Changes

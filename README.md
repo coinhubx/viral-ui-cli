@@ -1,1 +1,1 @@
-# ViralUI
+# ViralUI CLI

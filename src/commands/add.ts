@@ -2,7 +2,7 @@ import { existsSync, promises, readFileSync } from "fs";
 import path from "path";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
-import { fetchComponents } from "@/src/utils/registry";
+import { fetchComponents } from "@/src/utils/fetch-components";
 import chalk from "chalk";
 import { Command } from "commander";
 import ora from "ora";
