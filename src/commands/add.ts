@@ -10,6 +10,7 @@ import prompts from "prompts";
 import { z } from "zod";
 import { getPackageManager } from "../utils/get-package-manager";
 import { execa } from "execa";
+import { readFileSync } from "fs-extra";
 
 const addOptionsSchema = z.object({
   username: z.string(),
@@ -105,20 +106,20 @@ export const add = new Command()
 
         await fs.writeFile(filePath, item.content);
 
-        // const dependencies = extractDependencies(item.content);
+        const dependencies = await extractNewDependencies(item.content);
 
-        // const packageManager = await getPackageManager(cwd);
+        const packageManager = await getPackageManager(cwd);
 
-        // // Install dependencies.
-        // if (dependencies?.length) {
-        //   await execa(
-        //     packageManager,
-        //     [packageManager === "npm" ? "install" : "add", ...dependencies],
-        //     {
-        //       cwd,
-        //     }
-        //   );
-        // }
+        // Install dependencies.
+        if (dependencies?.length) {
+          await execa(
+            packageManager,
+            [packageManager === "npm" ? "install" : "add", ...dependencies],
+            {
+              cwd,
+            }
+          );
+        }
       }
 
       spinner.succeed(`Done.`);
@@ -127,16 +128,28 @@ export const add = new Command()
     }
   });
 
-function extractDependencies(content: string) {
+async function extractNewDependencies(content: string): Promise<string[]> {
   const regex = /import.*from ["']([^"']+)["']/g;
   let match;
   const dependencies = [];
 
+  // Read package.json
+  const packageJsonPath = path.resolve(process.cwd(), "package.json");
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  const existingDependencies = {
+    ...packageJson.dependencies,
+    ...packageJson.devDependencies,
+    ...packageJson.peerDependencies,
+  };
+
   while ((match = regex.exec(content)) !== null) {
     const pkg = match[1];
-    // Check if the import is likely an external package (not a local path)
+    // Check if the import is likely an external package (not a local path or scoped path)
     if (!pkg.startsWith(".") && !pkg.startsWith("/") && !pkg.startsWith("@/")) {
-      dependencies.push(pkg);
+      if (!existingDependencies[pkg]) {
+        // Check if the package is not already in package.json
+        dependencies.push(pkg);
+      }
     }
   }
   return dependencies;
