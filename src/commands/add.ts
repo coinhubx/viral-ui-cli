@@ -3,12 +3,7 @@ import path from "path";
 import { getPackageManager } from "@/src/utils/get-package-manager";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
-import {
-  fetchRegistry,
-  fetchTree,
-  getRegistryIndex,
-  resolveTree,
-} from "@/src/utils/registry";
+import { fetchComponents } from "@/src/utils/registry";
 import { transform } from "@/src/utils/transformers";
 import chalk from "chalk";
 import { Command } from "commander";
@@ -57,152 +52,109 @@ export const add = new Command()
       }
 
       // const registryIndex = await getRegistryIndex();
-      const ass = await fetchRegistry(["ass"]);
-      console.log(ass);
+      const payload = await fetchComponents();
+      console.log(payload);
 
-      // let selectedComponents = options.all
-      //   ? registryIndex.map((entry) => entry.name)
-      //   : options.components;
+      if (!payload.length) {
+        logger.warn("Selected components not found. Exiting.");
+        process.exit(0);
+      }
 
-      // if (!options.components?.length && !options.all) {
-      //   const { components } = await prompts({
-      //     type: "multiselect",
-      //     name: "components",
-      //     message: "Which components would you like to add?",
-      //     hint: "Space to select. A to toggle all. Enter to submit.",
-      //     instructions: false,
-      //     choices: registryIndex.map((entry) => ({
-      //       title: entry.name,
-      //       value: entry.name,
-      //       selected: options.all
-      //         ? true
-      //         : options.components?.includes(entry.name),
-      //     })),
-      //   });
-      //   selectedComponents = components;
-      // }
+      const spinner = ora(`Installing components...`).start();
 
-      // if (!selectedComponents?.length) {
-      //   logger.warn("No components selected. Exiting.");
-      //   process.exit(0);
-      // }
+      for (const item of payload) {
+        spinner.text = `Installing ${item.fileName}...`;
+        const targetDir = "@/components/ui";
 
-      // const tree = await resolveTree(registryIndex, selectedComponents);
-      // const payload = await fetchTree(tree);
+        if (!targetDir) {
+          continue;
+        }
 
-      // if (!payload.length) {
-      //   logger.warn("Selected components not found. Exiting.");
-      //   process.exit(0);
-      // }
+        if (!existsSync(targetDir)) {
+          await fs.mkdir(targetDir, { recursive: true });
+        }
 
-      // if (!options.yes) {
-      //   const { proceed } = await prompts({
-      //     type: "confirm",
-      //     name: "proceed",
-      //     message: `Ready to install components and dependencies. Proceed?`,
-      //     initial: true,
-      //   });
+        // const existingComponent = item.files.filter((file) =>
+        //   existsSync(path.resolve(targetDir, file.name))
+        // );
 
-      //   if (!proceed) {
-      //     process.exit(0);
-      //   }
-      // }
+        // if (existingComponent.length && !options.overwrite) {
+        //   if (selectedComponents.includes(item.name)) {
+        //     spinner.stop();
 
-      // const spinner = ora(`Installing components...`).start();
+        //     const { overwrite } = await prompts({
+        //       type: "confirm",
+        //       name: "overwrite",
+        //       message: `Component ${item.name} already exists. Would you like to overwrite?`,
+        //       initial: false,
+        //     });
 
-      // for (const item of payload) {
-      //   spinner.text = `Installing ${item.name}...`;
-      //   const targetDir = "@/components/ui";
+        //     if (!overwrite) {
+        //       logger.info(
+        //         `Skipped ${item.name}. To overwrite, run with the ${chalk.green(
+        //           "--overwrite"
+        //         )} flag.`
+        //       );
+        //       continue;
+        //     }
 
-      //   if (!targetDir) {
-      //     continue;
-      //   }
+        //     spinner.start(`Installing ${item.name}...`);
+        //   } else {
+        //     continue;
+        //   }
+        // }
 
-      //   if (!existsSync(targetDir)) {
-      //     await fs.mkdir(targetDir, { recursive: true });
-      //   }
+        // for (const file of item.files) {
+        //   let filePath = path.resolve(targetDir, file.name);
 
-      //   const existingComponent = item.files.filter((file) =>
-      //     existsSync(path.resolve(targetDir, file.name))
-      //   );
+        //   // Run transformers.
+        //   const content = await transform({
+        //     filename: file.name,
+        //     raw: file.content,
+        //   });
 
-      //   if (existingComponent.length && !options.overwrite) {
-      //     if (selectedComponents.includes(item.name)) {
-      //       spinner.stop();
+        await fs.writeFile("@/components/ui", item.content);
+        // }
 
-      //       const { overwrite } = await prompts({
-      //         type: "confirm",
-      //         name: "overwrite",
-      //         message: `Component ${item.name} already exists. Would you like to overwrite?`,
-      //         initial: false,
-      //       });
+        //
+        //
+        //
+        //
+        // Good Below this
 
-      //       if (!overwrite) {
-      //         logger.info(
-      //           `Skipped ${item.name}. To overwrite, run with the ${chalk.green(
-      //             "--overwrite"
-      //           )} flag.`
-      //         );
-      //         continue;
-      //       }
+        // const packageManager = await getPackageManager(cwd);
 
-      //       spinner.start(`Installing ${item.name}...`);
-      //     } else {
-      //       continue;
-      //     }
-      //   }
+        // Install dependencies.
+        // if (item.dependencies?.length) {
+        //   await execa(
+        //     packageManager,
+        //     [
+        //       packageManager === "npm" ? "install" : "add",
+        //       ...item.dependencies,
+        //     ],
+        //     {
+        //       cwd,
+        //     }
+        //   );
+        // }
 
-      //   for (const file of item.files) {
-      //     let filePath = path.resolve(targetDir, file.name);
+        // // Install devDependencies.
+        // if (item.devDependencies?.length) {
+        //   await execa(
+        //     packageManager,
+        //     [
+        //       packageManager === "npm" ? "install" : "add",
+        //       "-D",
+        //       ...item.devDependencies,
+        //     ],
+        //     {
+        //       cwd,
+        //     }
+        //   );
+        // }
+      }
 
-      //     // Run transformers.
-      //     const content = await transform({
-      //       filename: file.name,
-      //       raw: file.content,
-      //     });
-
-      //     await fs.writeFile(filePath, content);
-      //   }
-
-      //
-      //
-      //
-      //
-      // Good Below this
-
-      //   const packageManager = await getPackageManager(cwd);
-
-      //   // Install dependencies.
-      //   if (item.dependencies?.length) {
-      //     await execa(
-      //       packageManager,
-      //       [
-      //         packageManager === "npm" ? "install" : "add",
-      //         ...item.dependencies,
-      //       ],
-      //       {
-      //         cwd,
-      //       }
-      //     );
-      //   }
-
-      //   // Install devDependencies.
-      //   if (item.devDependencies?.length) {
-      //     await execa(
-      //       packageManager,
-      //       [
-      //         packageManager === "npm" ? "install" : "add",
-      //         "-D",
-      //         ...item.devDependencies,
-      //       ],
-      //       {
-      //         cwd,
-      //       }
-      //     );
-      //   }
-      // }
-
-      // spinner.succeed(`Done.`);
+      spinner.succeed(`Done.`);
     } catch (error) {
       handleError(error);
     }
