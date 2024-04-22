@@ -1,4 +1,4 @@
-import { existsSync, promises as fs } from "fs";
+import { existsSync, promises, readFileSync } from "fs";
 import path from "path";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
@@ -10,7 +10,6 @@ import prompts from "prompts";
 import { z } from "zod";
 import { getPackageManager } from "../utils/get-package-manager";
 import { execa } from "execa";
-import { readFileSync } from "fs-extra";
 
 const addOptionsSchema = z.object({
   username: z.string(),
@@ -73,7 +72,7 @@ export const add = new Command()
         }
 
         if (!existsSync(targetDir)) {
-          await fs.mkdir(targetDir, { recursive: true });
+          await promises.mkdir(targetDir, { recursive: true });
         }
 
         const existingComponent = existsSync(
@@ -104,7 +103,7 @@ export const add = new Command()
 
         const filePath = path.resolve(targetDir, item.fileName);
 
-        await fs.writeFile(filePath, item.content);
+        await promises.writeFile(filePath, item.content);
 
         const dependencies = await extractNewDependencies(item.content);
 
