@@ -59,7 +59,11 @@ export const add = new Command()
 
       for (const item of payload) {
         spinner.text = `Installing ${item.fileName}...`;
-        const targetDir = "src/components/ui";
+
+        const srcPath = path.join(cwd, "src");
+        const targetDir = existsSync(srcPath)
+          ? "src/components/ui"
+          : "components/ui";
 
         if (!targetDir) {
           continue;

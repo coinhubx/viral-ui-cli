@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.33
+
+### Patch Changes
+
+- add detect src dir
+
 ## 0.0.32
 
 ### Patch Changes
