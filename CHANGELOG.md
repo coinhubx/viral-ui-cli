@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.43
+
+### Patch Changes
+
+- remove code
+
 ## 0.0.42
 
 ### Patch Changes

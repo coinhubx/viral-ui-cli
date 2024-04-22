@@ -28,7 +28,7 @@ export async function fetchComponents(
 
     return components;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error(`Failed to fetch components from ${BASE_URL}.`);
   }
 }

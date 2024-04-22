@@ -1,61 +1,42 @@
-import { existsSync, promises, readFileSync } from "fs";
+import { existsSync, promises } from "fs";
 import path from "path";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
 import { fetchComponents } from "@/src/utils/fetch-components";
-import chalk from "chalk";
 import { Command } from "commander";
 import ora from "ora";
 import prompts from "prompts";
-import { z } from "zod";
 import { getPackageManager } from "../utils/get-package-manager";
 import { execa } from "execa";
 import { extractNewDependencies } from "../utils/extract-new-dependencies";
 
-const addOptionsSchema = z.object({
-  username: z.string(),
-  fileNames: z.array(z.string()),
-  yes: z.boolean(),
-  overwrite: z.boolean(),
-  cwd: z.string(),
-  all: z.boolean(),
-  path: z.string().optional(),
-});
-
 export const add = new Command()
   .name("add")
   .description("add a component to your project")
-  .argument("username", "the username of the component(s) you want")
-  .argument("[fileNames...]", "the file names of the components to add")
-  .option("-y, --yes", "skip confirmation prompt.", true)
-  .option("-o, --overwrite", "overwrite existing files.", false)
-  .option(
-    "-c, --cwd <cwd>",
-    "the working directory. defaults to the current directory.",
-    process.cwd()
+  .argument(
+    "username",
+    "the username of the author of the component(s) you want"
   )
-  .option("-a, --all", "add all available components", false)
-  .option("-p, --path <path>", "the path to add the component to.")
-  .action(async (username, fileNames, opts) => {
+  .argument("[fileNames...]", "the file names of the components to add")
+  .action(async (username, fileNames) => {
     try {
-      const options = addOptionsSchema.parse({
-        username,
-        fileNames,
-        ...opts,
-      });
-
-      const cwd = path.resolve(options.cwd);
-
-      if (!existsSync(cwd)) {
-        logger.error(`The path ${cwd} does not exist. Please try again.`);
-        process.exit(1);
-      }
+      const cwd = path.resolve(process.cwd());
 
       const payload = await fetchComponents(username, fileNames);
 
       if (!payload.length) {
         logger.warn("Selected components not found. Exiting.");
         process.exit(0);
+      }
+
+      if (payload.length < fileNames.length) {
+        logger.warn("The following components were not found:");
+        for (const fileName of fileNames) {
+          const found = payload.find((item) => item.fileName === fileName);
+          if (!found) {
+            logger.warn(`- ${fileName}`);
+          }
+        }
       }
 
       const spinner = ora(`Installing components...`).start();
@@ -82,7 +63,6 @@ export const add = new Command()
 
         if (existingComponent) {
           spinner.stop();
-
           const { overwrite } = await prompts({
             type: "confirm",
             name: "overwrite",
@@ -91,11 +71,7 @@ export const add = new Command()
           });
 
           if (!overwrite) {
-            logger.info(
-              `Skipped ${
-                item.fileName
-              }. To overwrite, run with the ${chalk.green("--overwrite")} flag.`
-            );
+            logger.info(`Skipped ${item.fileName}.`);
             continue;
           }
         }
@@ -105,7 +81,6 @@ export const add = new Command()
 
         const dependencies = await extractNewDependencies(item.content);
         const packageManager = await getPackageManager(cwd);
-        // Install dependencies.
         if (dependencies?.length) {
           await execa(
             packageManager,
