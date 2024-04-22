@@ -105,20 +105,20 @@ export const add = new Command()
 
         await fs.writeFile(filePath, item.content);
 
-        const dependencies = extractDependencies(item.content);
+        // const dependencies = extractDependencies(item.content);
 
-        const packageManager = await getPackageManager(cwd);
+        // const packageManager = await getPackageManager(cwd);
 
-        // Install dependencies.
-        if (dependencies?.length) {
-          await execa(
-            packageManager,
-            [packageManager === "npm" ? "install" : "add", ...dependencies],
-            {
-              cwd,
-            }
-          );
-        }
+        // // Install dependencies.
+        // if (dependencies?.length) {
+        //   await execa(
+        //     packageManager,
+        //     [packageManager === "npm" ? "install" : "add", ...dependencies],
+        //     {
+        //       cwd,
+        //     }
+        //   );
+        // }
       }
 
       spinner.succeed(`Done.`);
@@ -135,7 +135,7 @@ function extractDependencies(content: string) {
   while ((match = regex.exec(content)) !== null) {
     const pkg = match[1];
     // Check if the import is likely an external package (not a local path)
-    if (!pkg.startsWith(".") && !pkg.startsWith("/")) {
+    if (!pkg.startsWith(".") && !pkg.startsWith("/") && !pkg.startsWith("@/")) {
       dependencies.push(pkg);
     }
   }
