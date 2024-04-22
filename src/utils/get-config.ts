@@ -72,13 +72,19 @@ export async function resolveConfigPaths(cwd: string, config: RawConfig) {
 
 export async function getRawConfig(cwd: string): Promise<RawConfig | null> {
   try {
+    console.log("A");
     const configResult = await explorer.search(cwd);
+    console.log("B");
 
     if (!configResult) {
       return null;
     }
+    console.log("C");
+    const output = rawConfigSchema.parse(configResult.config);
 
-    return rawConfigSchema.parse(configResult.config);
+    console.log("D");
+
+    return output;
   } catch (error) {
     throw new Error(`Invalid configuration found in ${cwd}/components.json.`);
   }
