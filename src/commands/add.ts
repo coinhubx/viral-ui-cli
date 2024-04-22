@@ -107,14 +107,14 @@ export const add = new Command()
         //   let filePath = path.resolve(targetDir, file.name);
 
         //   // Run transformers.
-        const content = await transform({
-          filename: item.fileName,
-          raw: item.content,
-        });
+        // const content = await transform({
+        //   filename: item.fileName,
+        //   raw: item.content,
+        // });
 
-        console.log(content);
+        // console.log(content);
 
-        await fs.writeFile("src/components/ui", content);
+        await fs.writeFile("src/components/ui/button.tsx", item.content);
         // }
 
         //
