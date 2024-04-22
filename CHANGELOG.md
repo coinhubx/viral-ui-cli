@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.34
+
+### Patch Changes
+
+- add imstall dependencies
+
 ## 0.0.33
 
 ### Patch Changes

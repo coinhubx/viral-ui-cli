@@ -8,6 +8,8 @@ import { Command } from "commander";
 import ora from "ora";
 import prompts from "prompts";
 import { z } from "zod";
+import { getPackageManager } from "../utils/get-package-manager";
+import { execa } from "execa";
 
 const addOptionsSchema = z.object({
   username: z.string(),
@@ -102,6 +104,21 @@ export const add = new Command()
         const filePath = path.resolve(targetDir, item.fileName);
 
         await fs.writeFile(filePath, item.content);
+
+        const dependencies = extractDependencies(item.content);
+
+        const packageManager = await getPackageManager(cwd);
+
+        // Install dependencies.
+        if (dependencies?.length) {
+          await execa(
+            packageManager,
+            [packageManager === "npm" ? "install" : "add", ...dependencies],
+            {
+              cwd,
+            }
+          );
+        }
       }
 
       spinner.succeed(`Done.`);
@@ -109,3 +126,18 @@ export const add = new Command()
       handleError(error);
     }
   });
+
+function extractDependencies(content: string) {
+  const regex = /import.*from ["']([^"']+)["']/g;
+  let match;
+  const dependencies = [];
+
+  while ((match = regex.exec(content)) !== null) {
+    const pkg = match[1];
+    // Check if the import is likely an external package (not a local path)
+    if (!pkg.startsWith(".") && !pkg.startsWith("/")) {
+      dependencies.push(pkg);
+    }
+  }
+  return dependencies;
+}
