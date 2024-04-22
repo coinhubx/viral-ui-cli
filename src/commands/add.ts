@@ -113,7 +113,7 @@ export const add = new Command()
         //     raw: file.content,
         //   });
 
-        await fs.writeFile("@/components/ui", item.content);
+        await fs.writeFile("src/components/ui", item.content);
         // }
 
         //

@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.25
+
+### Patch Changes
+
+- test
+
 ## 0.0.24
 
 ### Patch Changes
