@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.39
+
+### Patch Changes
+
+- fix cli naming error
+
 ## 0.0.38
 
 ### Patch Changes

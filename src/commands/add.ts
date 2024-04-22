@@ -13,7 +13,7 @@ import { execa } from "execa";
 
 const addOptionsSchema = z.object({
   username: z.string(),
-  components: z.array(z.string()),
+  fileNames: z.array(z.string()),
   yes: z.boolean(),
   overwrite: z.boolean(),
   cwd: z.string(),
@@ -24,8 +24,8 @@ const addOptionsSchema = z.object({
 export const add = new Command()
   .name("add")
   .description("add a component to your project")
-  .argument("username", "the username of the component you want")
-  .argument("[components...]", "the components to add")
+  .argument("username", "the username of the component(s) you want")
+  .argument("[fileNames...]", "the file names of the components to add")
   .option("-y, --yes", "skip confirmation prompt.", true)
   .option("-o, --overwrite", "overwrite existing files.", false)
   .option(
