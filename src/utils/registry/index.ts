@@ -1,7 +1,6 @@
 import path from "path";
 import { Config } from "@/src/utils/get-config";
 import {
-  registryBaseColorSchema,
   registryIndexSchema,
   registryWithContentSchema,
 } from "@/src/utils/registry/schema";
@@ -10,7 +9,6 @@ import fetch from "node-fetch";
 import { z } from "zod";
 import { BASE_URL } from "../constants";
 
-const baseUrl = process.env.COMPONENTS_REGISTRY_URL ?? BASE_URL;
 const agent = process.env.https_proxy
   ? new HttpsProxyAgent(process.env.https_proxy)
   : undefined;
@@ -22,25 +20,6 @@ export async function getRegistryIndex() {
     return registryIndexSchema.parse(result);
   } catch (error) {
     throw new Error(`Failed to fetch components from registry.`);
-  }
-}
-
-export async function getRegistryBaseColors() {
-  return [
-    {
-      name: "zinc",
-      label: "Zinc",
-    },
-  ];
-}
-
-export async function getRegistryBaseColor(baseColor: string) {
-  try {
-    const [result] = await fetchRegistry([`colors/${baseColor}.json`]);
-
-    return registryBaseColorSchema.parse(result);
-  } catch (error) {
-    throw new Error(`Failed to fetch base color from registry.`);
   }
 }
 
@@ -106,8 +85,21 @@ async function fetchRegistry(paths: string[]) {
   try {
     const results = await Promise.all(
       paths.map(async (path) => {
-        const response = await fetch(`${baseUrl}/registry/${path}`, {
+        // Change this shit
+        // const response = await fetch(`${BASE_URL}/registry/${path}`, {
+        //   agent,
+        // });
+        // return await response.json();
+        const response = await fetch(`${BASE_URL}/api/components`, {
+          method: "POST",
           agent,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "cole",
+            fileName: "button.tsx",
+          }),
         });
         return await response.json();
       })
@@ -116,6 +108,6 @@ async function fetchRegistry(paths: string[]) {
     return results;
   } catch (error) {
     console.log(error);
-    throw new Error(`Failed to fetch registry from ${baseUrl}.`);
+    throw new Error(`Failed to fetch registry from ${BASE_URL}.`);
   }
 }

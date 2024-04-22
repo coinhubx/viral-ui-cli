@@ -11,8 +11,6 @@ import fs, { pathExists } from "fs-extra";
 import { loadConfig } from "tsconfig-paths";
 import { BASE_URL } from "./constants";
 
-// TODO: Add support for more frameworks.
-// We'll start with Next.js for now.
 const PROJECT_TYPES = [
   "next-app",
   "next-app-src",
@@ -79,10 +77,9 @@ export async function getProjectConfig(cwd: string): Promise<Config | null> {
   }
 
   const projectType = await getProjectType(cwd);
-  const tailwindCssFile = await getTailwindCssFile(cwd);
   const tsConfigAliasPrefix = await getTsConfigAliasPrefix(cwd);
 
-  if (!projectType || !tailwindCssFile || !tsConfigAliasPrefix) {
+  if (!projectType || !tsConfigAliasPrefix) {
     return null;
   }
 
@@ -92,13 +89,6 @@ export async function getProjectConfig(cwd: string): Promise<Config | null> {
     $schema: `${BASE_URL}/schema.json`,
     rsc: ["next-app", "next-app-src"].includes(projectType),
     tsx: isTsx,
-    tailwind: {
-      config: isTsx ? "tailwind.config.ts" : "tailwind.config.js",
-      baseColor: "zinc",
-      css: tailwindCssFile,
-      cssVariables: true,
-      prefix: "",
-    },
     aliases: {
       utils: `${tsConfigAliasPrefix}/lib/utils`,
       components: `${tsConfigAliasPrefix}/components`,
@@ -132,28 +122,6 @@ export async function getProjectType(cwd: string): Promise<ProjectType | null> {
   return isUsingSrcDir ? "next-pages-src" : "next-pages";
 }
 
-export async function getTailwindCssFile(cwd: string) {
-  const files = await fg.glob("**/*.css", {
-    cwd,
-    deep: 3,
-    ignore: PROJECT_SHARED_IGNORE,
-  });
-
-  if (!files.length) {
-    return null;
-  }
-
-  for (const file of files) {
-    const contents = await fs.readFile(path.resolve(cwd, file), "utf8");
-    // Assume that if the file contains `@tailwind base` it's the main css file.
-    if (contents.includes("@tailwind base")) {
-      return file;
-    }
-  }
-
-  return null;
-}
-
 export async function getTsConfigAliasPrefix(cwd: string) {
   const tsConfig = await loadConfig(cwd);
 
@@ -174,21 +142,4 @@ export async function getTsConfigAliasPrefix(cwd: string) {
 export async function isTypeScriptProject(cwd: string) {
   // Check if cwd has a tsconfig.json file.
   return pathExists(path.resolve(cwd, "tsconfig.json"));
-}
-
-export async function preFlight(cwd: string) {
-  // We need Tailwind CSS to be configured.
-  const tailwindConfig = await fg.glob("tailwind.config.*", {
-    cwd,
-    deep: 3,
-    ignore: PROJECT_SHARED_IGNORE,
-  });
-
-  if (!tailwindConfig.length) {
-    throw new Error(
-      "Tailwind CSS is not installed. Visit https://tailwindcss.com/docs/installation to get started."
-    );
-  }
-
-  return true;
 }

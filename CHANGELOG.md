@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.19
+
+### Patch Changes
+
+- change add functionality
+
 ## 0.0.18
 
 ### Patch Changes

@@ -21,16 +21,3 @@ export const registryItemWithContentSchema = registryItemSchema.extend({
 });
 
 export const registryWithContentSchema = z.array(registryItemWithContentSchema);
-
-export const registryBaseColorSchema = z.object({
-  inlineColors: z.object({
-    light: z.record(z.string(), z.string()),
-    dark: z.record(z.string(), z.string()),
-  }),
-  cssVars: z.object({
-    light: z.record(z.string(), z.string()),
-    dark: z.record(z.string(), z.string()),
-  }),
-  inlineColorsTemplate: z.string(),
-  cssVarsTemplate: z.string(),
-});

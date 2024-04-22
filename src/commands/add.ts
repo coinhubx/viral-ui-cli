@@ -7,7 +7,6 @@ import { logger } from "@/src/utils/logger";
 import {
   fetchTree,
   getItemTargetPath,
-  getRegistryBaseColor,
   getRegistryIndex,
   resolveTree,
 } from "@/src/utils/registry";
@@ -20,7 +19,8 @@ import prompts from "prompts";
 import { z } from "zod";
 
 const addOptionsSchema = z.object({
-  components: z.array(z.string()).optional(),
+  username: z.string(),
+  components: z.array(z.string()),
   yes: z.boolean(),
   overwrite: z.boolean(),
   cwd: z.string(),
@@ -31,6 +31,7 @@ const addOptionsSchema = z.object({
 export const add = new Command()
   .name("add")
   .description("add a component to your project")
+  .argument("username", "the username of the component you want")
   .argument("[components...]", "the components to add")
   .option("-y, --yes", "skip confirmation prompt.", true)
   .option("-o, --overwrite", "overwrite existing files.", false)
@@ -41,9 +42,10 @@ export const add = new Command()
   )
   .option("-a, --all", "add all available components", false)
   .option("-p, --path <path>", "the path to add the component to.")
-  .action(async (components, opts) => {
+  .action(async (username, components, opts) => {
     try {
       const options = addOptionsSchema.parse({
+        username,
         components,
         ...opts,
       });
@@ -56,10 +58,11 @@ export const add = new Command()
       }
 
       const config = await getConfig(cwd);
+
       if (!config) {
         logger.warn(
           `Configuration is missing. Please run ${chalk.green(
-            `init`
+            `pnpm dlx shadcn-ui@latest init`
           )} to create a components.json file.`
         );
         process.exit(1);
@@ -70,6 +73,7 @@ export const add = new Command()
       let selectedComponents = options.all
         ? registryIndex.map((entry) => entry.name)
         : options.components;
+
       if (!options.components?.length && !options.all) {
         const { components } = await prompts({
           type: "multiselect",
@@ -95,7 +99,6 @@ export const add = new Command()
 
       const tree = await resolveTree(registryIndex, selectedComponents);
       const payload = await fetchTree(tree);
-      const baseColor = await getRegistryBaseColor(config.tailwind.baseColor);
 
       if (!payload.length) {
         logger.warn("Selected components not found. Exiting.");
@@ -116,6 +119,7 @@ export const add = new Command()
       }
 
       const spinner = ora(`Installing components...`).start();
+
       for (const item of payload) {
         spinner.text = `Installing ${item.name}...`;
         const targetDir = await getItemTargetPath(
@@ -138,6 +142,7 @@ export const add = new Command()
         if (existingComponent.length && !options.overwrite) {
           if (selectedComponents.includes(item.name)) {
             spinner.stop();
+
             const { overwrite } = await prompts({
               type: "confirm",
               name: "overwrite",
@@ -168,7 +173,6 @@ export const add = new Command()
             filename: file.name,
             raw: file.content,
             config,
-            baseColor,
           });
 
           if (!config.tsx) {
@@ -178,6 +182,12 @@ export const add = new Command()
 
           await fs.writeFile(filePath, content);
         }
+
+        //
+        //
+        //
+        //
+        // Good Below this
 
         const packageManager = await getPackageManager(cwd);
 
@@ -210,6 +220,7 @@ export const add = new Command()
           );
         }
       }
+
       spinner.succeed(`Done.`);
     } catch (error) {
       handleError(error);
