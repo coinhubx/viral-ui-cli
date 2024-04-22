@@ -1,12 +1,10 @@
 import { existsSync, promises as fs } from "fs";
 import path from "path";
-import { getPackageManager } from "@/src/utils/get-package-manager";
 import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
 import { fetchComponents } from "@/src/utils/registry";
 import chalk from "chalk";
 import { Command } from "commander";
-import { execa } from "execa";
 import ora from "ora";
 import prompts from "prompts";
 import { z } from "zod";
@@ -100,44 +98,6 @@ export const add = new Command()
         const filePath = path.resolve(targetDir, item.fileName);
 
         await fs.writeFile(filePath, item.content);
-        // }
-
-        //
-        //
-        //
-        //
-        // Good Below this
-
-        // const packageManager = await getPackageManager(cwd);
-
-        // // Install dependencies.
-        // if (item.dependencies?.length) {
-        //   await execa(
-        //     packageManager,
-        //     [
-        //       packageManager === "npm" ? "install" : "add",
-        //       ...item.dependencies,
-        //     ],
-        //     {
-        //       cwd,
-        //     }
-        //   );
-        // }
-
-        // // Install devDependencies.
-        // if (item.devDependencies?.length) {
-        //   await execa(
-        //     packageManager,
-        //     [
-        //       packageManager === "npm" ? "install" : "add",
-        //       "-D",
-        //       ...item.devDependencies,
-        //     ],
-        //     {
-        //       cwd,
-        //     }
-        //   );
-        // }
       }
 
       spinner.succeed(`Done.`);
