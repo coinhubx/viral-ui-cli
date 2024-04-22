@@ -53,7 +53,6 @@ export const add = new Command()
 
       // const registryIndex = await getRegistryIndex();
       const payload = await fetchComponents();
-      console.log(payload);
 
       if (!payload.length) {
         logger.warn("Selected components not found. Exiting.");
@@ -108,12 +107,12 @@ export const add = new Command()
         //   let filePath = path.resolve(targetDir, file.name);
 
         //   // Run transformers.
-        //   const content = await transform({
-        //     filename: file.name,
-        //     raw: file.content,
-        //   });
+        const content = await transform({
+          filename: item.fileName,
+          raw: item.content,
+        });
 
-        await fs.writeFile("src/components/ui", item.content);
+        await fs.writeFile("src/components/ui", content);
         // }
 
         //
