@@ -25,7 +25,9 @@ export const add = new Command()
       const payload = await fetchComponents(username, fileNames);
 
       if (!payload.length) {
-        logger.warn("Selected components not found. Exiting.");
+        logger.warn(
+          "Selected components not found. Make sure username and component name(s) are correct."
+        );
         process.exit(0);
       }
 
@@ -39,7 +41,7 @@ export const add = new Command()
         }
       }
 
-      const spinner = ora(`Installing components...`).start();
+      const spinner = ora(`Adding components...`).start();
 
       for (const item of payload) {
         const srcPath = path.join(cwd, "src");
@@ -66,7 +68,7 @@ export const add = new Command()
           const { overwrite } = await prompts({
             type: "confirm",
             name: "overwrite",
-            message: `Component ${item.fileName} already exists. Would you like to overwrite?`,
+            message: `Component ${item.fileName} already exists. Would you like to overwrite it?`,
             initial: false,
           });
 
@@ -92,7 +94,7 @@ export const add = new Command()
         }
       }
 
-      spinner.succeed(`Done.`);
+      spinner.succeed(`Done ✅`);
     } catch (error) {
       handleError(error);
     }
