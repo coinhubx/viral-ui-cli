@@ -1,5 +1,11 @@
 # viral-ui
 
+## 0.0.46
+
+### Patch Changes
+
+- update auto dep function
+
 ## 0.0.45
 
 ### Patch Changes

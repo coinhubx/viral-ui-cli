@@ -20,7 +20,8 @@ export async function extractNewDependencies(
     const pkg = match[1];
 
     if (!pkg.startsWith(".") && !pkg.startsWith("/") && !pkg.startsWith("@/")) {
-      if (!existingDependencies[pkg]) {
+      const pkgBaseDir = pkg.split("/")[0];
+      if (!existingDependencies[pkg] && !existingDependencies[pkgBaseDir]) {
         dependencies.push(pkg);
       }
     }
