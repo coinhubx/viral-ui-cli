@@ -1,5 +1,11 @@
 # viral-ui-cli
 
+## 0.0.48
+
+### Patch Changes
+
+- production ready
+
 ## 0.0.47
 
 ### Patch Changes
