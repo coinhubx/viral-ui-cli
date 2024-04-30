@@ -1,1 +1,1 @@
-export const BASE_URL = "https://viral-ui.vercel.app";
+export const BASE_URL = "https://viralui.com";
