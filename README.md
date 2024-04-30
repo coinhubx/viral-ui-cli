@@ -41,7 +41,7 @@ Here they are (I also added --success):
 
 ## Naming
 
-Use kebab-case since this is what shadcn/ui already uses. Feel free to name your components whatever you want but as a user I would like it if your custom input was not called input.tsx because shadcn/ui already has that and I might want to use both in my project. I would call it something like cool-input.tsx or cole-input.tsx.
+Use kebab-case and named export since this is what shadcn/ui already uses. Feel free to name your components whatever you want but as a user I would like it if your custom input was not called input.tsx because shadcn/ui already has that and I might want to use both in my project. I would call it something like cool-input.tsx or cole-input.tsx.
 
 ## components/ui folder
 
